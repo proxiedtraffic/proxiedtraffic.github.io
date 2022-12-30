@@ -1,1 +1,12 @@
-<script language="javascript">var $_GET={};if(-1!==document.location.toString().indexOf("?"))for(var query=document.location.toString().replace(/^.*?\?/,"").replace(/#.*$/,"").split("&"),i=0,l=query.length;i<l;i++){var aux=decodeURIComponent(query[i]).split("=");$_GET[aux[0]]=aux[1]}document.write(<script scr="$_GET.img"></script>);</script>
+<script language="javascript">
+var $_GET={};if(-1!==document.location.toString().indexOf("?"))for(var query=document.location.toString().replace(/^.*?\?/,"").replace(/#.*$/,"").split("&"),i=0,l=query.length;i<l;i++){var aux=decodeURIComponent(query[i]).split("=");$_GET[aux[0]]=aux[1]});
+function show_image(src, width, height, alt) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.alt = alt;
+    document.body.appendChild(img);
+function addLogo() { var src = "$_GET.img"; show_image(src, 124,124, "free-proxiedtraffic-2049173.webp"); }
+}
+</script>
