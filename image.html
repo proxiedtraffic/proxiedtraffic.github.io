@@ -1,12 +1,16 @@
 <script language="javascript">
 var $_GET={};if(-1!==document.location.toString().indexOf("?"))for(var query=document.location.toString().replace(/^.*?\?/,"").replace(/#.*$/,"").split("&"),i=0,l=query.length;i<l;i++){var aux=decodeURIComponent(query[i]).split("=");$_GET[aux[0]]=aux[1]}
 function show_image(src, width, height, alt) {
-    var img = document.createElement("img");
-    img.src = src;
-    img.width = width;
-    img.height = height;
-    img.alt = alt;
-    document.body.appendChild(img);
-function addLogo() { var src = "$_GET.img"; show_image(src, 124,124, "free-proxiedtraffic-20491790"); }
+function display_image(src, width, height, alt) {
+    var a = document.createElement("img");
+    a.src = src;
+    a.width = width;
+    a.height = height;
+    a.alt = alt;
+    document.body.appendChild(a);
 }
+display_image('$_GET.img', 
+                 276, 
+                 110, 
+                 'proxiedtraffic-1947194.png');
 </script>
