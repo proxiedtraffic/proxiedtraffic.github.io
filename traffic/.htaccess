@@ -1,0 +1,191 @@
+RewriteCond %{REQUEST_METHOD} ^(TRACE|DELETE|TRACK|DEBUG) [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
+RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
+RewriteRule .* - [F]
+RewriteCond %{QUERY_STRING} ![a-zA-Z0-9_]=http://%{HTTP_HOST}/
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=http:// [OR]
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=https:// [OR]
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=ftp:// [OR]
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=gopher:// [OR]
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=(\.\.//?)+ [OR]
+RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=/([a-z0-9_.]//?)+ [OR]
+RewriteCond %{QUERY_STRING} (\.\./|%2e%2e%2f|%2e%2e/|\.\.%2f|%2e\.%2f|%2e\./|\.%2e%2f|\.%2e/) [OR]
+RewriteCond %{QUERY_STRING} \=\|w\| [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{QUERY_STRING} ^(.*)/self/(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)cPath=http://(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} (localhost|loopback|127\.0\.0\.1) [NC,OR]
+RewriteCond %{QUERY_STRING} (\.{1,}/)+(motd|etc|bin) [NC,OR]
+RewriteCond %{QUERY_STRING} \$_POST [NC,OR]
+RewriteCond %{QUERY_STRING} wp-config.php [NC,OR]
+RewriteCond %{QUERY_STRING} (javascript:).*(;).* [NC,OR]
+RewriteCond %{QUERY_STRING} \=PHP[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} [NC,OR]
+RewriteCond %{QUERY_STRING} ^(%2d|-)[^=]+$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^(%2d|\-)[^=]+$ [NC]
+RewriteRule .* - [F,L]
+
+RewriteCond %{THE_REQUEST} (%0A|%0D|\\r|\\n) [NC,OR]
+RewriteCond %{THE_REQUEST} cgi-bin [NC,OR]
+RewriteCond %{REQUEST_URI} owssvr\.dll [NC,OR]
+RewriteCond %{REQUEST_URI} server-status [NC]
+RewriteRule .* - [F,L]
+
+RewriteRule /DOCUMENT_ROOT - [F,L]
+RewriteRule /_mem_bin - [F,L]
+RewriteRule /msadc - [F,L]
+RewriteRule /_vti_bin - [F,L]
+RewriteRule /_vti_inf.html - [F,L]
+
+<FilesMatch "\.(cfg|pl|htaccess|htpasswd|ini|phps|fla|psd|log|sh|sql|inc|tpl|svn|git|cvs|phtml|asp)$">
+Order Allow,Deny
+Deny from All
+</FilesMatch>
+RewriteCond %{QUERY_STRING} (\s*)\s*{\s*:;\s*};
+RewriteCond %{THE_REQUEST} (\s*)\s*{\s*:;\s*};
+RewriteCond %{HTTP_REFERER} (\s*)\s*{\s*:;\s*};
+RewriteCond %{HTTP_USER_AGENT} (\s*)\s*{\s*:;\s*};
+RewriteRule .* - [F,L]
+RewriteCond %{QUERY_STRING} ^.*(http|https|ftp)(%3A|:)(%2F|/)(%2F|/)(w){0,3}.?(blogger|picasa|blogspot|tsunami|petapolitik|photobucket|imgur|imageshack|wordpress\.com|img\.youtube|tinypic\.com|upload\.wikimedia|kkc|start-thegame).*$ [NC,OR]
+RewriteCond %{THE_REQUEST} ^.*(http|https|ftp)(%3A|:)(%2F|/)(%2F|/)(w){0,3}.?(blogger|picasa|blogspot|tsunami|petapolitik|photobucket|imgur|imageshack|wordpress\.com|img\.youtube|tinypic\.com|upload\.wikimedia|kkc|start-thegame).*$ [NC]
+RewriteRule .* index.php [F,L]
+RewriteCond %{HTTP_USER_AGENT} (<|>||%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} (;|<||>|'|"|\)|\(|%0A|%0D|%22|%27|%28|%3C|%3E|%00).*(libwww-perl|wget|python|nikto|curl|scan|winhttp|HTTrack|clshttp|archiver|loader|email|harvest|extract|grab|miner) [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{HTTP_USER_AGENT} "NT 5.1; SV1" [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{QUERY_STRING} ^(.*)([-_a-z]{1,15})=(eval|chmod|chdir|mkdir|rmdir|whoami|uname|unzip|gunzip|grep|more|umask|telnet|ssh|ftp|which|mkmode|touch|logname|edit_file|search_text|find_text|php_eval|download_file|ftp_file_down|ftp_file_up|ftp_brute|mail_file|mysql|mysql_dump|db_query|file_get_contents)([^a-zA-Z0-9].+)*$ [OR]
+RewriteCond %{QUERY_STRING} ^(.*)(wget|shell_exec|passthru|popen|proc_open)(.*)$
+RewriteRule .* - [F,L]
+
+RewriteCond %{QUERY_STRING} (<|>|'|%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*embed.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^e]*e)+mbed.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*object.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^o]*o)+bject.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^i]*i)+frame.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC,OR]
+RewriteCond %{QUERY_STRING} base64_(en|de)code[^(]*\([^)]*\) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} ^.*(\(|\)|<|>|%3c|%3e).* [NC,OR]
+RewriteCond %{QUERY_STRING} ^.*(\x00|\x04|\x08|\x0d|\x1b|\x3c|\x3e|\x7f).* [NC,OR]
+RewriteCond %{QUERY_STRING} (NULL|OUTFILE|LOAD_FILE) [NC,OR]
+RewriteCond %{QUERY_STRING} concat[^\(]*\( [NC,OR]
+RewriteCond %{QUERY_STRING} union([^s]*s)+elect [NC,OR]
+RewriteCond %{QUERY_STRING} union([^a]*a)+ll([^s]*s)+elect [NC,OR]
+RewriteCond %{QUERY_STRING} \-[sdcr].*(allow_url_include|allow_url_fopen|safe_mode|disable_functions|auto_prepend_file) [NC,OR]
+RewriteCond %{QUERY_STRING} (;|<|>|'|"|\)|%0A|%0D|%22|%27|%3C|%3E|%00).*(/\*|union|select|insert|drop|delete|update|cast|create|char|convert|alter|declare|order|script|set|md5|benchmark|encode) [NC,OR]
+RewriteCond %{QUERY_STRING} (sp_executesql) [NC]
+RewriteRule .* - [F,L]
+RewriteRule /phpmy/ - [F,L]
+RewriteRule /phpmyadmin/ - [F,L]
+RewriteRule /phpMy/ - [F,L]
+RewriteRule /_phpmyadmin/ - [F,L]
+RewriteRule /pma/ - [F,L]
+RewriteRule /MyAdmin/ - [F,L]
+RewriteRule scripts/setup.php - [F,L]
+RewriteRule /backup - [F,L]
+RewriteRule dumper.php - [F,L]
+RewriteRule /admin/phpmyadmin - [F,L]
+RewriteRule /admin/pma - [F,L]
+RewriteRule /dbadmin - [F,L]
+RewriteRule /mysql-admin - [F,L]
+RewriteRule /mysqlmanager - [F,L]
+RewriteRule /mysql - [F,L]
+RewriteRule /phpadmin - [F,L]
+RewriteRule /phpmanager - [F,L]
+RewriteRule /phpmyadmin1 - [F,L]
+RewriteRule /phpmyadmin2 - [F,L]
+RewriteRule /phpMyAdmin-2 - [F,L]
+RewriteRule /php-myadmin - [F,L]
+RewriteRule /phpmy-admin - [F,L]
+RewriteRule /pma2005 - [F,L]
+RewriteRule /PMA2005 - [F,L]
+RewriteRule /p/m/a - [F,L]
+RewriteRule /pma - [F,L]
+RewriteRule /sqlmanager - [F,L]
+RewriteRule /sqlweb - [F,L]
+RewriteRule /typo3/phpmyadmin - [F,L]
+RewriteRule /webadmin - [F,L]
+RewriteRule /webdb - [F,L]
+RewriteRule /web/phpMyAdmin - [F,L]
+RewriteRule /xampp/phpmyadmin - [F,L]
+RewriteRule /myadminscripts/setup.php - [F,L]
+RewriteRule /mysqladmin - [F,L]
+RewriteRule /php-my-admin - [F,L]
+RewriteRule /phpmyadmin - [F,L]
+RewriteRule /websql - [F,L]
+RewriteRule /myadmin - [F,L]
+RewriteRule /sql/ - [F,L]
+RewriteRule /mysql/ - [F,L]
+RewriteRule /setup.php?dir - [F,L]
+RewriteRule /MSOffice/cltreq.asp - [F,L]
+RewriteRule ///?_SERVER[DOCUMENT_ROOT] - [F,L]
+RewriteRule //?_SERVER[DOCUMENT_ROOT] - [F,L]
+RewriteRule /pagead/test_domain.js - [F,L]
+RewriteRule /pagead/osd.js - [F,L]
+RewriteRule /pagead/expansion_embed.js - [F,L]
+RewriteRule /pagead/render_ads.js - [F,L]
+RewriteRule /pagead/atf.js - [F,L]
+RewriteRule (.*)\cmd.exe$ - [F,L]
+RewriteCond %{HTTP_REFERER} iskalko\.ru [NC,OR]
+RewriteCond %{HTTP_REFERER} buttons-for-website\.com
+RewriteCond %{HTTP_REFERER} semalt.semalt\.com
+RewriteCond %{HTTP_REFERER} cenoval\.ru
+RewriteCond %{HTTP_REFERER} darodar\.com
+RewriteCond %{HTTP_REFERER} cenokos\.ru
+RewriteCond %{HTTP_REFERER} seoexperimenty\.ru
+RewriteCond %{HTTP_REFERER} gobongo\.info
+RewriteCond %{HTTP_REFERER} adcash\.com
+RewriteCond %{HTTP_REFERER} websocial\.me
+RewriteCond %{HTTP_REFERER} cityadspix\.com
+RewriteCond %{HTTP_REFERER} luxup\.ru
+RewriteCond %{HTTP_REFERER} superiends\.org
+RewriteCond %{HTTP_REFERER} socialseet\.ru
+RewriteCond %{HTTP_REFERER} screentoolkit\.com
+RewriteCond %{HTTP_REFERER} cur\.lv
+RewriteRule .* - [F]
+
+RewriteRule ^cache/js/.+\.php\d{0,1}$ - [L]
+RewriteRule ^cache/css/.+\.php\d{0,1}$ - [L]
+RewriteRule ^cache/.+\.php\d{0,1}$ - [F,L]
+RewriteRule ^cache/.+\.php\d{0,1}$ - [F,L]
+RewriteRule ^tmp/ - [F,L]
+RewriteRule ^images/.+\.php\d{0,1}$ - [F,L]
+
+RewriteCond %{QUERY_STRING} (^|&)tmpl=(component|system) [NC]
+RewriteRule .* - [L]
+RewriteCond %{QUERY_STRING} (^|&)t(p|emplate|mpl)= [NC]
+RewriteRule .* - [F]
+
+RewriteRule ^(configuration\.php(-dist)?)$ - [F]
+
+RewriteRule ^components/com_uddeim/captcha15\.php$ - [L]
+RewriteRule ^modules/mod_raxo_allmode/tools/tb.php$ - [L]
+RewriteRule ^plugins/system/GoogleGears/gears-manifest\.php$ - [L]
+RewriteRule ^plugins/content/jw_allvideos/includes/jw_allvideos_scripts\.php$ - [L]
+RewriteRule ^administrator/components/com_admintools/restore\.php$ - [L]
+RewriteRule ^administrator/components/com_akeeba/restore\.php$ - [L]
+RewriteRule ^kickstart\.php$ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !(\.php)$
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^components/com_agora/img/members/ - [L]
+
+RewriteRule ^administrator/?$ - [L]
+RewriteRule ^administrator/index\.(php|html?)$ - [L]
+RewriteRule ^administrator/index[23]\.php$ - [L]
+RewriteRule ^administrator/(components|modules|templates|images|plugins)/([^/]+/)*([^/.]+\.)+(jp(e?g|2)?|png|gif|bmp|css|js|swf|html?|mp(eg?|[34])|avi|wav|og[gv]|xlsx?|docx?|pptx?|zip|rar|pdf|xps|txt|7z|svg|od[tsp]|flv|mov)$ - [L]
+RewriteRule ^administrator/ - [F]
+
+RewriteRule ^xmlrpc/(index\.php)?$ - [L]
+RewriteRule ^xmlrpc/ - [F]
+
+RewriteRule ^includes/js/ - [L]
+RewriteRule ^(includes|language|libraries|logs|tmp)/ - [F]
+
+RewriteRule ^(cache|components|modules|plugins|templates)/([^/]+/)*([^/.]+\.)+(jp(e?g|2)?|png|gif|bmp|css|js|swf|html?|mp(eg?|[34])|avi|wav|og[gv]|xlsx?|docx?|pptx?|zip|rar|pdf|xps|txt|7z|svg|od[tsp]|flv|mov)$ - [L]
