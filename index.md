@@ -1,2 +1,2 @@
-# ProxiedTraffic ©
+# ProxiedTraffic
 <hr>
